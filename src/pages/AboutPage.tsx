@@ -1,8 +1,6 @@
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import TeamMemberCard from '../components/TeamMemberCard';
-import { teamMembers } from '../data/team';
 
 const AboutPage: React.FC = () => {
   return (
@@ -81,24 +79,6 @@ const AboutPage: React.FC = () => {
                 <li><span className="font-medium">Empathy:</span> We understand our customers' needs and challenges.</li>
               </ul>
             </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Our Team */}
-      <section className="section">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Meet Our Leadership Team</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              The experienced professionals driving Constant Cash's mission forward.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member) => (
-              <TeamMemberCard key={member.id} member={member} />
-            ))}
           </div>
         </div>
       </section>
