@@ -13,22 +13,27 @@ const Router: React.FC = () => {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const path = window.location.hash ? window.location.hash.substring(1) : '/';
+      const hash = window.location.hash;
+      // Handle both cases: with and without trailing slash
+      const path = hash ? hash.substring(1).replace(/\/$/, '') : '/';
       setCurrentPath(path);
       scrollToTop();
     };
 
     window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // Handle initial route
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Remove trailing slashes for consistency
-  const normalizedPath = currentPath.endsWith('/') && currentPath !== '/' 
-    ? currentPath.slice(0, -1) 
-    : currentPath;
+  // Handle both cases: with and without trailing slash
+  const normalizedPath = currentPath.replace(/\/$/, '');
 
-  const renderPage = () => {
-    switch (normalizedPath) {
+  // Check if the path contains a hash fragment for same-page navigation
+  const isHashLink = normalizedPath.includes('#');
+  if (isHashLink) {
+    const basePath = normalizedPath.split('#')[0] || '/';
+    // Only check the base path part for routing
+    switch (basePath) {
       case '/':
         return <HomePage />;
       case '/about':
@@ -40,13 +45,22 @@ const Router: React.FC = () => {
       default:
         return <NotFoundPage />;
     }
-  };
+  }
 
-  return (
-    <div className="fade-in">
-      {renderPage()}
-    </div>
-  );
+  // Regular route matching
+  switch (normalizedPath) {
+    case '':
+    case '/':
+      return <HomePage />;
+    case '/about':
+      return <AboutPage />;
+    case '/privacy-policy':
+      return <PrivacyPolicyPage />;
+    case '/terms':
+      return <TermsPage />;
+    default:
+      return <NotFoundPage />;
+  }
 };
 
 export default Router;

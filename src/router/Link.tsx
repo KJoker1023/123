@@ -12,7 +12,7 @@ export const Link: React.FC<LinkProps> = ({ to, children, className = '', onClic
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     
-    // Check if the link is a hash link to a section on the same page
+    // Handle hash links for same-page navigation
     if (to.includes('#') && !to.startsWith('/')) {
       const targetId = to.split('#')[1];
       if (targetId) {
@@ -22,9 +22,14 @@ export const Link: React.FC<LinkProps> = ({ to, children, className = '', onClic
         }
       }
     } else {
-      // Update the URL
-      window.location.hash = to === '/' ? '' : to;
-      scrollToTop();
+      // Normalize the path by removing trailing slashes
+      const normalizedPath = to === '/' ? '' : to.replace(/\/$/, '');
+      window.location.hash = normalizedPath;
+      
+      // Only scroll to top for full page navigation
+      if (!to.includes('#')) {
+        scrollToTop();
+      }
     }
     
     // Call the additional onClick handler if provided
